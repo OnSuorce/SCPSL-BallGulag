@@ -11,7 +11,7 @@ namespace BallGulag.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     class Wipe : ICommand
     {
-        public string Command { get; set; } = BallGulag.pluginInstance.Config.wipeCommand;
+        public string Command { get; set; } = BallGulagPlugin.pluginInstance.Config.wipeCommand;
 
         public string[] Aliases { get; set; } = null;
 
@@ -19,9 +19,18 @@ namespace BallGulag.Commands
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = " ";
-            BallGulag.pluginInstance.Gulag.wipe();
+            response = "Sending wipe command";
+            
+            if (sender is PlayerCommandSender player)
+            {
+                BallGulagPlugin.pluginInstance.gulag.wipe();
+                response = $" sent the command!";
+                var a = Player.Get(player.SenderId);
+                a.RemoteAdminMessage("Wiped!");
+            }
+         
             return true;
         }
+
     }
 }

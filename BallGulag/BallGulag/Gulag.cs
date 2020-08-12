@@ -11,23 +11,51 @@ namespace BallGulag
         Player player1;
         Player player2;
         List<Player> queue;
+        List<Player> alreadyBeenInGulag;
 
         public Gulag()
         {
             queue = new List<Player>();
+            alreadyBeenInGulag = new List<Player>();
+        }
+
+        public Player[] GetPlayersInGulag()
+        {
+            Player[] players = { player1, player2 };
+            return players;
         }
 
         public void wipe()
-        {
+        {       
             player1.Hurt(player1.MaxHealth);
             player2.Hurt(player2.MaxHealth);
             player1.ShowHint("Gulag wiped from admins");
             player2.ShowHint("Gulag wiped from admins");
         }
 
+        private bool hasBeenInGulag(Player player)
+        {
+            Log.Info($"started has been in gulag");
+            foreach (var playr in alreadyBeenInGulag)
+            {
+                if(playr.UserId == player.UserId)
+                {
+                    return true;
+                }
+            }
+            Log.Info($"finished has been in gulag");
+            return false;
+        }
         public void AddInQueue(Player player)
         {
+            Log.Info($"started add in queue");
+            if (hasBeenInGulag(player))
+            {
+                return;
+            }
             queue.Add(player);
+
+            player.Broadcast(5, "You are in queue for the <color=red>Gulag</color>");
 
             if (queue.Count == 2)
             {
@@ -100,14 +128,28 @@ namespace BallGulag
 
         public bool isInGulag(Player player)
         {
-            if (player.UserId == player1.UserId || player.UserId == player2.UserId) return true;
+            if (player1 != null)
+            {
+                if (player.UserId == player1.UserId)
+                {
+                    return true;
+                }
+            }
+            if(player2 != null)
+            {
+                if (player.UserId == player2.UserId)
+                {
+                    return true;
+                }
+            }
+            
             return false;
         }
 
         private void giveBall()
         {
-            player1.Broadcast(10,BallGulag.pluginInstance.Config.msg);
-            player2.Broadcast(10, BallGulag.pluginInstance.Config.msg);
+            player1.Broadcast(10,BallGulagPlugin.pluginInstance.Config.msg);
+            player2.Broadcast(10, BallGulagPlugin.pluginInstance.Config.msg);
             player1.AddItem(ItemType.SCP018);
             player2.AddItem(ItemType.SCP018);
         }

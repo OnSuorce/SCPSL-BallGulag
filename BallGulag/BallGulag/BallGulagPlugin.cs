@@ -4,12 +4,13 @@ using Exiled.API.Features;
 
 namespace BallGulag
 {
-    class BallGulag : Plugin<Config>
+    class BallGulagPlugin : Plugin<Config>
     {
-        private static readonly Lazy<BallGulag> LazyInstance = new Lazy<BallGulag>(() => new BallGulag());
-        public static BallGulag pluginInstance => LazyInstance.Value;
+        private static readonly Lazy<BallGulagPlugin> LazyInstance = new Lazy<BallGulagPlugin>(() => new BallGulagPlugin());
+        public static BallGulagPlugin pluginInstance => LazyInstance.Value;
         private Handlers.GulagEvent GulagEvent;
-        public Gulag Gulag;
+        public Gulag gulag;
+        
 
         public override void OnEnabled()
         {
@@ -22,19 +23,21 @@ namespace BallGulag
         }
         public void Register()
         {
+            
             GulagEvent = new Handlers.GulagEvent();
-            Gulag = new Gulag();
+            
             //Exiled.Events.Handlers.Scp914.UpgradingItems += GulagEvent;
-            //Exiled.Events.Handlers.Player.Died += GulagEvent.OnDeath;
+            Exiled.Events.Handlers.Player.Died += GulagEvent.onPlayerDeath;
             
         }
         public void UnRegister()
         {
             //Exiled.Events.Handlers.Scp914.UpgradingItems -= GulagEvent.OnUpgrading;
-            //Exiled.Events.Handlers.Player.Died -= GulagEvent.OnPlayerDead;
+            Exiled.Events.Handlers.Player.Died -= GulagEvent.onPlayerDeath;
 
             GulagEvent = null;
-            Gulag = null;
+            
+
         }
     }
 }
