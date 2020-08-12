@@ -23,8 +23,8 @@ namespace BallGulag
         {
             GulagEvent = new Handlers.GulagEvent();
             //Exiled.Events.Handlers.Scp914.UpgradingItems += GulagEvent;
-            //Exiled.Events.Handlers.Player.Died += GulagEvent;
-
+            //Exiled.Events.Handlers.Player.Died += GulagEvent.OnDeath;
+            
         }
         public void UnRegister()
         {
