@@ -15,18 +15,13 @@ namespace BallGulag.Handlers
             GulagRef = new Gulag();
             BallGulagPlugin.pluginInstance.gulag = GulagRef;
         }
-
-        public void wipe()
-        {
-            
-        }
         public void onPlayerDeath(DiedEventArgs ev) 
         {
             try
             {
                 Log.Info($"{ev.Target}");
                 Log.Info($"{ev.Killer}");
-                if (!GulagRef.isInGulag(ev.Target))
+                if (!(GulagRef.hasBeenInGulag(ev.Target) || GulagRef.isInGulag(ev.Target)))
                     {
                         Log.Info($"{ev.Target.Nickname} dead");
                         GulagRef.AddInQueue(ev.Target);
@@ -42,6 +37,21 @@ namespace BallGulag.Handlers
                 Log.Info(ex.ToString());
             }
             
+        }
+
+        bool flag = true;
+        public void onSpawn(SpawningEventArgs ev)
+        {
+            if (flag)
+            {
+                flag = false;
+                return;
+            }
+
+            if (GulagRef.isInQueue(ev.Player)) 
+            {
+                GulagRef.remove(ev.Player);
+            }
         }
         
 

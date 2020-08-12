@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BallGulagPlugin.cs" />
+    <Compile Include="Commands\RemoveFromQueue.cs" />
     <Compile Include="Commands\Wipe.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Gulag.cs" />

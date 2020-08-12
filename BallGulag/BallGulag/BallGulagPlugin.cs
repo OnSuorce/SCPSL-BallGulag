@@ -28,12 +28,14 @@ namespace BallGulag
             
             //Exiled.Events.Handlers.Scp914.UpgradingItems += GulagEvent;
             Exiled.Events.Handlers.Player.Died += GulagEvent.onPlayerDeath;
+            Exiled.Events.Handlers.Player.Spawning += GulagEvent.onSpawn;
             
         }
         public void UnRegister()
         {
             //Exiled.Events.Handlers.Scp914.UpgradingItems -= GulagEvent.OnUpgrading;
             Exiled.Events.Handlers.Player.Died -= GulagEvent.onPlayerDeath;
+            Exiled.Events.Handlers.Player.Spawning -= GulagEvent.onSpawn;
 
             GulagEvent = null;
             

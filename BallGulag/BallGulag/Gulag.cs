@@ -25,6 +25,11 @@ namespace BallGulag
             return players;
         }
 
+        public void remove(Player player)
+        {
+            queue.Remove(player);
+            player.Broadcast(5, "You are no longer queueing for the <color=red>Gulag</color> ");
+        }
         public void wipe()
         {       
             player1.Hurt(player1.MaxHealth);
@@ -33,9 +38,9 @@ namespace BallGulag
             player2.ShowHint("Gulag wiped from admins");
         }
 
-        private bool hasBeenInGulag(Player player)
+        public bool hasBeenInGulag(Player player)
         {
-            Log.Info($"started has been in gulag");
+            
             foreach (var playr in alreadyBeenInGulag)
             {
                 if(playr.UserId == player.UserId)
@@ -49,24 +54,26 @@ namespace BallGulag
         public void AddInQueue(Player player)
         {
             Log.Info($"started add in queue");
-            if (hasBeenInGulag(player))
-            {
-                return;
-            }
             queue.Add(player);
+            Log.Info($"player added");
+            Log.Info($"{queue[0]}");
 
             player.Broadcast(5, "You are in queue for the <color=red>Gulag</color>");
 
             if (queue.Count == 2)
             {
                 start();
-            }
+            }else Log.Info($"false");
         }
 
         private void start()
         {
+            Log.Info($"Gulag started");
             player1 = queue[0];
             player2 = queue[1];
+
+            queue.Remove(player1);
+            queue.Remove(player2);
 
             player1.SetRole(RoleType.Tutorial);
             player2.SetRole(RoleType.Tutorial);
@@ -76,7 +83,7 @@ namespace BallGulag
 
         private void respawnWinner(Player player)
         {
-
+            
             if (Map.IsLCZDecontaminated)
 
             {
@@ -104,13 +111,14 @@ namespace BallGulag
                 player.AddItem(ItemType.Flashlight);
                 player.AddItem(ItemType.KeycardJanitor);
             }
+            start();
 
 
             player.Health = player.MaxHealth;
             var players = Player.List;
             foreach(Player playr in players)
             {
-                playr.SendConsoleMessage($"GulagPlugin: {player.Nickname} Escaped form the gulag", "red");
+                playr.SendConsoleMessage($"GulagPlugin: {player.Nickname} Escaped from the gulag", "red");
             }
         }
 
@@ -124,8 +132,21 @@ namespace BallGulag
             {
                 respawnWinner(player1);
             }
+
+            
         }
 
+        public bool isInQueue(Player player)
+        {
+            foreach (var playr in queue)
+            {
+                if (playr.UserId == player.UserId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public bool isInGulag(Player player)
         {
             if (player1 != null)
@@ -141,8 +162,7 @@ namespace BallGulag
                 {
                     return true;
                 }
-            }
-            
+            } 
             return false;
         }
 

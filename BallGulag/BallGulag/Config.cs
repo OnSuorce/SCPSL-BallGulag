@@ -10,9 +10,14 @@ namespace BallGulag
         public bool IsEnabled { get; set; } = true;
 
         [Description("Message to display to players on gulag start, supports Unity  rich text")]
-        public string msg { get; set; } = "Wellcome to the <color=red>gulag</color>, Use the ball to kill your enemy and survive";
+        public string msg { get; set; } = "Welcome to the <color=red>gulag</color>, Use the ball to kill your enemy and survive";
 
         [Description("Command to kill everyone in the gulag ")]
         public string wipeCommand { get; set; } = "wipegulag";
+
+        [Description("Command to remove from queue ")]
+        public string removeCommand { get; set; } = "removefromqueue";
+
+
     }
 }
