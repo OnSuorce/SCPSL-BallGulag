@@ -17,17 +17,17 @@ namespace BallGulag
             queue = new List<Player>();
         }
 
+        public void wipe()
+        {
+            player1.Hurt(player1.MaxHealth);
+            player2.Hurt(player2.MaxHealth);
+            player1.ShowHint("Gulag wiped from admins");
+            player2.ShowHint("Gulag wiped from admins");
+        }
+
         public void AddInQueue(Player player)
         {
-            if (player1 == null)
-            {
-                player1 = player;
-            }
-            else if (player2 == null)
-            {
-                player2 = player;
-            }
-            else queue.Add(player);
+            queue.Add(player);
 
             if (queue.Count == 2)
             {
@@ -58,14 +58,32 @@ namespace BallGulag
                     {
                         player.SetRole(RoleType.ClassD);
                         player.Position = room.Position;
+                        player.AddItem(ItemType.GunProject90);
+                        player.SetAmmo(Exiled.API.Enums.AmmoType.Nato9, 100);
+                        player.AddItem(ItemType.Radio);
+                        player.AddItem(ItemType.Flashlight);
+                        player.AddItem(ItemType.KeycardChaosInsurgency);
 
                     }
                 }
 
             }
-            else { player.SetRole(RoleType.ClassD); }
+            else
+            {
+                player.SetRole(RoleType.Scientist);
+                player.AddItem(ItemType.GunUSP);
+                player.SetAmmo(Exiled.API.Enums.AmmoType.Nato556, 100);     
+                player.AddItem(ItemType.Flashlight);
+                player.AddItem(ItemType.KeycardJanitor);
+            }
+
 
             player.Health = player.MaxHealth;
+            var players = Player.List;
+            foreach(Player playr in players)
+            {
+                playr.SendConsoleMessage($"GulagPlugin: {player.Nickname} Escaped form the gulag", "red");
+            }
         }
 
         public void getWinner(Player dead)

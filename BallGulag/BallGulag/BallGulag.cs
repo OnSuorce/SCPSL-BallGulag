@@ -9,6 +9,7 @@ namespace BallGulag
         private static readonly Lazy<BallGulag> LazyInstance = new Lazy<BallGulag>(() => new BallGulag());
         public static BallGulag pluginInstance => LazyInstance.Value;
         private Handlers.GulagEvent GulagEvent;
+        public Gulag Gulag;
 
         public override void OnEnabled()
         {
@@ -22,6 +23,7 @@ namespace BallGulag
         public void Register()
         {
             GulagEvent = new Handlers.GulagEvent();
+            Gulag = new Gulag();
             //Exiled.Events.Handlers.Scp914.UpgradingItems += GulagEvent;
             //Exiled.Events.Handlers.Player.Died += GulagEvent.OnDeath;
             
@@ -32,6 +34,7 @@ namespace BallGulag
             //Exiled.Events.Handlers.Player.Died -= GulagEvent.OnPlayerDead;
 
             GulagEvent = null;
+            Gulag = null;
         }
     }
 }
